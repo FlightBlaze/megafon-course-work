@@ -22,9 +22,15 @@ class Ensemble(BaseEstimator, TransformerMixin):
         p = np.zeros((X.shape[0], 2))
         for i in range(p.shape[0]):
             for j in range(2):
+                best_proba = 0
+                mean_proba = 0
                 for k in range(n_models):
-                    p[i,j] += preds[k][i,j]
-                    p[i,j] /= n_models
+                    proba = preds[k][i,j]
+                    if proba > best_proba:
+                        best_proba = proba
+                    mean_proba += proba
+                mean_proba /= k
+                p[i,j] = best_proba
         
         return p
 
